@@ -62,7 +62,10 @@ export default function* patchySaga(selector, client = simpleClient) {
       // reset on MOUNT_DOCUMENT).
       // However, we should never initiate two PATCH requests on the same action, which
       // should be ensured by 'cancel'.
-      yield cancel(sagas.get(key));
+      yield /* TODO: JSFIX could not patch the breaking change:
+      errors thrown during cancellation process are no longer swallowed, you need to keep finally blocks fail-safe
+      Suggested fix: Code in the finally block of the cancelled task should be wrapped in a try-catch or similar if errors may appear in the finally block (NOTICE, in many cases, sufficient error handling is already in place).*/
+      cancel([sagas.get(key)]);
       sagas.delete(key);
     }
 
